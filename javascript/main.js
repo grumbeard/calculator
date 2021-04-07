@@ -36,10 +36,8 @@ function handleInput(e) {
   // Otherwise, input is operator
   } else {
     // Check if necessary inputs are available
-    if (readyToOperate()) {
-      // If so, evaluate inputs and display results
-      handleEvaluation();
-    }
+    // If so, evaluate inputs and display results
+    if (readyToOperate()) handleEvaluation();
     // Etiher way, store the new operator
     memory.operator = processedInput.operator;
   }
@@ -87,7 +85,7 @@ function operate(num1, num2, operator) {
 function updateDisplay(results) {
   // Round to 15 significant figures only when displaying value
   // Ensures stored value in memory remains accurate
-  if (results) results = results.toPrecision(15);
+  if (results) results = +results.toFixed(15);
 
   displayPanel.innerText = results;
 }
