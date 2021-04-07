@@ -86,7 +86,10 @@ function operate(num1, num2, operator) {
 
 function updateDisplay(results) {
   // Round to 15 significant figures only when displaying value
-  displayPanel.innerText = results.toPrecision(15);
+  // Ensures stored value in memory remains accurate
+  if (results) results = results.toPrecision(15);
+
+  displayPanel.innerText = results;
 }
 
 function updateOperands(outcome) {
@@ -102,3 +105,10 @@ function resetValues() {
 // Detect Equals
 const equalsButton = document.getElementById("equals__btn");
 equalsButton.addEventListener("click", handleEvaluation);
+
+// Detect Cancel
+const cancelButton = document.getElementById("cancel__btn");
+cancelButton.addEventListener("click", () => {
+  resetValues('num1', 'num2', 'operator');
+  updateDisplay('');
+});
