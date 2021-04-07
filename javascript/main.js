@@ -33,7 +33,13 @@ function handleEnter() {
   if (readyToOperate()) {
     let num1 = parseFloat(storedNum1);
     let num2 = parseFloat(storedNum2);
-    inputField.value = operate(num1, num2, storedOperator);
+    let outcome = operate(num1, num2, storedOperator);
+    // Round to 15 significant figures only when displaying value
+    inputField.value = outcome.toPrecision(15);
+
+    // Update stored values
+    storedNum1 = outcome;
+    resetValues(storedNum2, storedOperator);
   }
 }
 
@@ -53,5 +59,15 @@ function operate(num1, num2, operator) {
   switch (operator) {
     case '+':
     return num1 + num2;
+    case '-':
+    return num1 - num2;
+    case '*':
+    return num1 * num2;
+    case '/':
+    return num1 / num2;
   }
+}
+
+function resetValues() {
+  [...arguments].forEach(argument => argument = '');
 }
