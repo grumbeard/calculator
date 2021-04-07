@@ -1,7 +1,9 @@
 // Init placeholders to store numbers and operators
-let storedNum1 = '';
-let storedNum2 = '';
-let storedOperator = '';
+let memory = {
+  num1: '',
+  num2: '',
+  operator: ''
+};
 
 // Detect Enter
 const enterButton = document.getElementById("btn__enter");
@@ -17,30 +19,30 @@ function handleEnter() {
 
   // If input is number, store number
   if (processedInput.number) {
-    if (storedNum2 || storedOperator) {
-      storedNum2 += processedInput.number;
+    if (memory.num2 || memory.operator) {
+      memory.num2 += processedInput.number;
     } else {
-      storedNum1 += processedInput.number;
+      memory.num1 += processedInput.number;
     }
-  // Otherwise, input is operator and should be stored as such
+  // Otherwise, input is operator
   } else {
-    storedOperator = processedInput.operator;
-  }
-  console.log(`Num1: ${storedNum1}, Num2: ${storedNum2}, Operator: ${storedOperator}`);
+    // Check if necessary inputs are available
+    // If so, evaluate inputs and display results
+    if (readyToOperate()) {
+      let num1 = parseFloat(memory.num1);
+      let num2 = parseFloat(memory.num2);
+      let outcome = operate(num1, num2, memory.operator);
+      // Round to 15 significant figures only when displaying value
+      inputField.value = outcome.toPrecision(15);
 
-  // Check if necessary inputs are available
-  // If so, evaluate inputs and display results
-  if (readyToOperate()) {
-    let num1 = parseFloat(storedNum1);
-    let num2 = parseFloat(storedNum2);
-    let outcome = operate(num1, num2, storedOperator);
-    // Round to 15 significant figures only when displaying value
-    inputField.value = outcome.toPrecision(15);
-
-    // Update stored values
-    storedNum1 = outcome;
-    resetValues(storedNum2, storedOperator);
+      // Update stored operands
+      memory.num1 = outcome;
+      resetValues('num2');
+    }
+    // Etiher way, store the new operator
+    memory.operator = processedInput.operator;
   }
+  console.log(`Num1: ${memory.num1}, Num2: ${memory.num2}, Operator: ${memory.operator}`);
 }
 
 function processInput(string) {
@@ -52,7 +54,7 @@ function processInput(string) {
 }
 
 function readyToOperate() {
-  return storedNum1 && storedNum2 && storedOperator;
+  return memory.num1 && memory.num2 && memory.operator;
 }
 
 function operate(num1, num2, operator) {
@@ -69,5 +71,5 @@ function operate(num1, num2, operator) {
 }
 
 function resetValues() {
-  [...arguments].forEach(argument => argument = '');
+  [...arguments].forEach(argument => memory[argument] = '');
 }
