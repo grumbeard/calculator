@@ -27,13 +27,9 @@ function handleEnter() {
   // Otherwise, input is operator
   } else {
     // Check if necessary inputs are available
-    // If so, evaluate inputs and display results
     if (readyToOperate()) {
-      let num1 = parseFloat(memory.num1);
-      let num2 = parseFloat(memory.num2);
-      let outcome = operate(num1, num2, memory.operator);
-      // Round to 15 significant figures only when displaying value
-      inputField.value = outcome.toPrecision(15);
+      // If so, evaluate inputs and display results
+      handleOperation();
 
       // Update stored operands
       memory.num1 = outcome;
@@ -57,6 +53,13 @@ function readyToOperate() {
   return memory.num1 && memory.num2 && memory.operator;
 }
 
+function handleOperation() {
+  let num1 = parseFloat(memory.num1);
+  let num2 = parseFloat(memory.num2);
+  let outcome = operate(num1, num2, memory.operator);
+  updateDisplay(outcome);
+}
+
 function operate(num1, num2, operator) {
   switch (operator) {
     case '+':
@@ -68,6 +71,11 @@ function operate(num1, num2, operator) {
     case '/':
     return num1 / num2;
   }
+}
+
+function updateDisplay(results) {
+  // Round to 15 significant figures only when displaying value
+  inputField.value = results.toPrecision(15);
 }
 
 function resetValues() {
