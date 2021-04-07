@@ -28,9 +28,12 @@ function handleInput(e) {
 
   // If input is number, store number
   if (processedInput.number) {
+    let num = processedInput.number;
     if (memory.num2 || memory.operator) {
+      if (num == "." && memory.num2.includes(".")) num = '';
       memory.num2 += processedInput.number;
     } else {
+      if (num == "." && memory.num1.includes(".")) num = '';
       memory.num1 += processedInput.number;
     }
   // Otherwise, input is operator
@@ -46,7 +49,7 @@ function handleInput(e) {
 
 function processInput(string) {
   // Extract numbers (including floats)
-  let number = string.match(/\d+\.?\d*/);
+  let number = string.match(/\d+|\.+/);
   // Extract any valid operators
   let operator = string.match(/[+\-/]|\*{1,2}/);
   return number ? {number: number[0]} : {operator: operator[0]};
