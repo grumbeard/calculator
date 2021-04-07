@@ -1,58 +1,75 @@
 // Init placeholders to store numbers and operators
-let storedNum1 = '';
-let storedNum2 = '';
-let storedOperator = '';
+let memory = {
+  num1: '',
+  num2: '',
+  operator: ''
+};
 
-// Detect Enter
-const enterButton = document.getElementById("btn__enter");
-enterButton.addEventListener("click", handleEnter);
+// Detect calculator number / operator inputs
+const numbers = document.getElementsByClassName("number");
+for (let number of numbers) {
+  number.addEventListener("click", handleInput);
+};
 
-function handleEnter() {
+const operators = document.getElementsByClassName("operator");
+for (let operator of operators) {
+  operator.addEventListener("click", handleInput);
+};
+
+const displayPanel = document.getElementById("display-panel");
+
+
+function handleInput(e) {
   // Get user input
   // ASSUMPTION: user inputs one digit/symbol at a time
-  const inputField = document.querySelector("input");
-  const userInput = inputField.value;
+  const userInput = e.target.innerText;
   let processedInput = processInput(userInput);
   // Update input field with results of evaluation
 
   // If input is number, store number
   if (processedInput.number) {
-    if (storedNum2 || storedOperator) {
-      storedNum2 += processedInput.number;
+    let num = processedInput.number;
+    if (memory.num2 || memory.operator) {
+      if (num == "." && memory.num2.includes(".")) num = '';
+      memory.num2 += processedInput.number;
     } else {
-      storedNum1 += processedInput.number;
+      if (num == "." && memory.num1.includes(".")) num = '';
+      memory.num1 += processedInput.number;
     }
-  // Otherwise, input is operator and should be stored as such
+  // Otherwise, input is operator
   } else {
-    storedOperator = processedInput.operator;
+    // Check if necessary inputs are available
+    // If so, evaluate inputs and display results
+    if (readyToOperate()) handleEvaluation();
+    // Etiher way, store the new operator
+    memory.operator = processedInput.operator;
   }
-  console.log(`Num1: ${storedNum1}, Num2: ${storedNum2}, Operator: ${storedOperator}`);
-
-  // Check if necessary inputs are available
-  // If so, evaluate inputs and display results
-  if (readyToOperate()) {
-    let num1 = parseFloat(storedNum1);
-    let num2 = parseFloat(storedNum2);
-    let outcome = operate(num1, num2, storedOperator);
-    // Round to 15 significant figures only when displaying value
-    inputField.value = outcome.toPrecision(15);
-
-    // Update stored values
-    storedNum1 = outcome;
-    resetValues(storedNum2, storedOperator);
-  }
+  console.log(`Num1: ${memory.num1}, Num2: ${memory.num2}, Operator: ${memory.operator}`);
 }
 
 function processInput(string) {
   // Extract numbers (including floats)
-  let number = string.match(/\d+\.?\d*/);
+  let number = string.match(/\d+|\.+/);
   // Extract any valid operators
   let operator = string.match(/[+\-/]|\*{1,2}/);
   return number ? {number: number[0]} : {operator: operator[0]};
 }
 
 function readyToOperate() {
-  return storedNum1 && storedNum2 && storedOperator;
+  return memory.num1 && memory.num2 && memory.operator;
+}
+
+function handleEvaluation(e) {
+  let num1 = parseFloat(memory.num1);
+  let num2 = parseFloat(memory.num2);
+  let outcome = operate(num1, num2, memory.operator);
+  updateDisplay(outcome);
+  updateOperands(outcome);
+  // Operator should be reset to blank if evaluation triggered by '=' button
+  // Operator stored in memory is otherwise usually updated to the operator that triggered the evaluation
+  if (e) {
+    if (e.target.id == "equals__btn") resetValues('operator')
+  }
 }
 
 function operate(num1, num2, operator) {
@@ -68,6 +85,31 @@ function operate(num1, num2, operator) {
   }
 }
 
-function resetValues() {
-  [...arguments].forEach(argument => argument = '');
+function updateDisplay(results) {
+  // Round to 15 significant figures only when displaying value
+  // Ensures stored value in memory remains accurate
+  if (results) results = +results.toFixed(15);
+
+  displayPanel.innerText = results;
 }
+
+function updateOperands(outcome) {
+  // Update stored operands
+  memory.num1 = outcome;
+  resetValues('num2');
+}
+
+function resetValues() {
+  [...arguments].forEach(argument => memory[argument] = '');
+}
+
+// Detect Equals
+const equalsButton = document.getElementById("equals__btn");
+equalsButton.addEventListener("click", handleEvaluation);
+
+// Detect Cancel
+const cancelButton = document.getElementById("cancel__btn");
+cancelButton.addEventListener("click", () => {
+  resetValues('num1', 'num2', 'operator');
+  updateDisplay('');
+});

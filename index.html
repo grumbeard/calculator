@@ -6,8 +6,32 @@
   <title>Calculator</title>
 </head>
 <body>
-  <input type="text">
-  <div id="btn__enter">Submit</div>
+  <main>
+    <div id="calculator-body">
+      <div id="display-panel"></div>
+      <div id="numbers-container">
+        <div class="number" data-num="9">9</div>
+        <div class="number" data-num="8">8</div>
+        <div class="number" data-num="7">7</div>
+        <div class="number" data-num="6">6</div>
+        <div class="number" data-num="5">5</div>
+        <div class="number" data-num="4">4</div>
+        <div class="number" data-num="3">3</div>
+        <div class="number" data-num="2">2</div>
+        <div class="number" data-num="1">1</div>
+        <div class="number" data-num="0">0</div>
+        <div class="number" data-num=".">.</div>
+      </div>
+      <div id="operands-container">
+        <div class="operator" data-operator="+">+</div>
+        <div class="operator" data-operator="+">-</div>
+        <div class="operator" data-operator="+">*</div>
+        <div class="operator" data-operator="+">/</div>
+      </div>
+      <div id="equals__btn">=</div>
+      <div id="cancel__btn">C</div>
+    </div>
+  </main>
   <script src="javascript/main.js"></script>
 </body>
 </html>
