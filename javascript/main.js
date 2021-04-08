@@ -82,17 +82,19 @@ function operate(num1, num2, operator) {
     return num1 + num2;
     case '-':
     return num1 - num2;
-    case '*':
+    case 'x':
     return num1 * num2;
     case '/':
     return num1 / num2;
+    default:
+    return "invalid";
   }
 }
 
 function updateDisplay(value) {
   // Round to 8 significant figures only when displaying value
   // Ensures stored value in memory remains accurate
-  if (value) value = +value.toFixed(8);
+  if (value && value != "invalid") value = +value.toFixed(8);
 
   displayText.innerText = value;
 }
@@ -117,3 +119,21 @@ cancelButton.addEventListener("click", () => {
   resetValues('num1', 'num2', 'operator');
   updateDisplay('');
 });
+
+// Detect Delete
+const deleteButton = document.getElementById("delete");
+deleteButton.addEventListener("click", () => {
+  if (memory.num2) {
+    memory.num2 = removeLastChar(memory.num2);
+    updateDisplay(parseFloat(memory.num2));
+  } else if (memory.num1) {
+    // If any operator exists, user can still delete character from num1
+    memory.num1 = removeLastChar(memory.num1);
+    updateDisplay(parseFloat(memory.num1));
+  }
+  // Nothing happens if there is no numerical input to delete
+});
+
+function removeLastChar(string) {
+  return string.substring(0, (string.length - 1));
+}
