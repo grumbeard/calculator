@@ -22,8 +22,7 @@ const displayText = document.getElementById("display-text");
 function handleInput(e) {
   // Get user input
   // ASSUMPTION: user inputs one digit/symbol at a time
-  const userInput = e.target.innerText;
-  let processedInput = processInput(userInput);
+  let processedInput = processInput(e);
   // Update input field with results of evaluation
 
   // If input is number, store number
@@ -47,12 +46,14 @@ function handleInput(e) {
   console.log(`Num1: ${memory.num1}, Num2: ${memory.num2}, Operator: ${memory.operator}`);
 }
 
-function processInput(string) {
-  // Extract numbers (including floats)
-  let number = string.match(/\d+|\.+/);
-  // Extract any valid operators
-  let operator = string.match(/[+\-/]|\*{1,2}/);
-  return number ? {number: number[0]} : {operator: operator[0]};
+function processInput(event) {
+  // Identify type of input
+  const inputType = event.target.dataset.type;
+  const input = event.target.innerText;
+  let inputObj = {};
+  inputObj[inputType] = input;
+
+  return inputObj;
 }
 
 function readyToOperate() {
