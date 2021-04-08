@@ -44,7 +44,7 @@ This calculator takes both mouse and keyboard inputs and is able to store the re
 
 ## Implemented UI
 (animation not shown)
-![image](https://user-images.githubusercontent.com/51464365/114055937-c371ec80-98c3-11eb-86bc-9c7aa3e1e471.png)
+![image](https://user-images.githubusercontent.com/51464365/114056942-c02b3080-98c4-11eb-820c-f92d31db96eb.png)
 
 ![image](https://user-images.githubusercontent.com/51464365/114055619-84439b80-98c3-11eb-9e5e-1e0287ceacba.png)
 
