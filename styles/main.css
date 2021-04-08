@@ -1,6 +1,6 @@
 @import "reset.css";
 @import "colors.css";
-@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Coiny&family=Monoton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Coiny&family=Monoton&display=swap');
 
 body {
   background-color: var(--mint);
@@ -142,9 +142,10 @@ main {
   padding: 10px;
   border-radius: 10px;
   box-shadow: 4px 4px 4px var(--indigo);
+  transition-duration: 0.3s;
 }
 
-.button:hover {
+.button:hover, .typed {
   filter: hue-rotate(270deg) contrast(200%);
 }
 
