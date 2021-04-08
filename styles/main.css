@@ -161,6 +161,10 @@ main {
     width: 95vw;
   }
 
+  #display-text {
+    font-size: 1.5em;
+  }
+
   #keys-panel {
     height: auto;
     display: grid;
@@ -187,7 +191,6 @@ main {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, 1fr);
     grid-gap: 10px;
-    direction: rtl;
   }
 
   .button {
