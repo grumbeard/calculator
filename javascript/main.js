@@ -29,11 +29,14 @@ function handleInput(e) {
   if (processedInput.number) {
     let num = processedInput.number;
     if (memory.num2 || memory.operator) {
+      // Ignore extrad period inputs
       if (num == "." && memory.num2.includes(".")) num = '';
       memory.num2 += processedInput.number;
+      updateDisplay(parseFloat(memory.num2));
     } else {
       if (num == "." && memory.num1.includes(".")) num = '';
       memory.num1 += processedInput.number;
+      updateDisplay(parseFloat(memory.num1));
     }
   // Otherwise, input is operator
   } else {
@@ -86,12 +89,12 @@ function operate(num1, num2, operator) {
   }
 }
 
-function updateDisplay(results) {
+function updateDisplay(value) {
   // Round to 8 significant figures only when displaying value
   // Ensures stored value in memory remains accurate
-  if (results) results = +results.toFixed(8);
+  if (value) value = +value.toFixed(8);
 
-  displayText.innerText = results;
+  displayText.innerText = value;
 }
 
 function updateOperands(outcome) {
