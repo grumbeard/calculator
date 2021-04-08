@@ -142,9 +142,10 @@ main {
   padding: 10px;
   border-radius: 10px;
   box-shadow: 4px 4px 4px var(--indigo);
+  transition-duration: 0.3s;
 }
 
-.button:hover {
+.button:hover, .typed {
   filter: hue-rotate(270deg) contrast(200%);
 }
 
