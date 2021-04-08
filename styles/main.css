@@ -1,0 +1,154 @@
+@import "reset.css";
+@import "colors.css";
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Coiny&family=Monoton&display=swap');
+
+body {
+  background-color: var(--mint);
+  font-family: 'Coiny', cursive;
+}
+
+main {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#calculator-body {
+  width: 60vw;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--lavender);
+  border-radius: 15px;
+  box-shadow: 10px 10px 1px var(--navy);
+  animation: pulse 3s linear infinite;
+}
+
+@keyframes pulse {
+  30%, 80% {
+    box-shadow: 15px 15px 1px var(--indigo);
+  }
+  50% {
+    box-shadow: 20px 20px 1px var(--navy);
+  }
+}
+
+#display-panel {
+  height: 20vh;
+  background-color: var(--indigo);
+  border-radius: 15px 15px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  animation: pulse-inset 6s linear infinite;
+}
+
+@keyframes pulse-inset {
+  0%, 100% {
+    box-shadow: inset 0px 0px 30px var(--navy);
+  }
+  25% {
+    box-shadow: inset 0px 0px 0px var(--navy);
+  }
+  50% {
+    box-shadow: inset 0px 0px 50px var(--navy);
+  }
+  75% {
+    box-shadow: inset 0px 0px 20px var(--navy);
+  }
+}
+
+#display-text {
+  font-size: 3em;
+  padding: 0 1em;
+  font-family: 'Monoton', cursive;
+  color: var(--navy);
+  overflow: hidden;
+}
+
+#keys-panel {
+  height: 40vh;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 1em;
+  grid-template-areas:
+  "num num num operator operator cancel"
+  "num num num operator operator delete"
+  "num num num equals equals equals";
+  padding: 1em;
+  background-color: var(--blueberry);
+  box-shadow: 0px 0px 4px var(--indigo);
+}
+
+#numbers-container {
+  grid-area: num;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-gap: 1em;
+}
+
+#operators-container {
+  grid-area: operator;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 1em;
+}
+
+#cancel {
+  grid-area: cancel;
+  background-color: var(--lilac);
+}
+
+#delete {
+  grid-area: delete;
+  background-color: var(--orchid);
+}
+
+#equals {
+  grid-area: equals;
+  background-color: var(--banana);
+}
+
+#cancel, #delete, #equals {
+  color: var(--navy);
+}
+
+[data-num="0"] {
+  grid-column: 1/ span 2;
+  grid-row: 4/ span 1;
+}
+
+.number {
+  background-color: var(--navy);
+  color: var(--coral);
+}
+
+.number:hover {
+  background-color: var(--lavender);
+  color: var(--navy);
+}
+
+.operator {
+  background-color: var(--coral);
+  color: var(--navy);
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 4px 4px 4px var(--indigo);
+}
+
+.button:hover {
+  filter: hue-rotate(270deg) contrast(200%);
+}
+
+.button:active {
+  box-shadow: none;
+  transform: translateY(4px);
+}

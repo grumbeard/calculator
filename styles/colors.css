@@ -1,0 +1,13 @@
+/* Create color variables to keep palette consistent */
+body {
+  --mint: rgba(176,246,242,1);
+  --lavender: rgba(229,201,242,1);
+  --indigo: rgba(104,101,158,1);
+  --blueberry: rgba(105,126,202,1);
+  --navy: rgba(0,49,105,1);
+  --coral: rgba(250,113,113,1);
+  --lilac: rgba(210,144,208,1);
+  --orchid: rgba(206,195,238,1);
+  --banana: rgba(255,243,164,1);
+  --stone: rgba(151,151,151,1);
+}

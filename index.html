@@ -4,32 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculator</title>
+  <link rel="stylesheet" type="text/css" href="styles/main.css">
 </head>
 <body>
   <main>
     <div id="calculator-body">
-      <div id="display-panel"></div>
-      <div id="numbers-container">
-        <div class="number" data-num="9">9</div>
-        <div class="number" data-num="8">8</div>
-        <div class="number" data-num="7">7</div>
-        <div class="number" data-num="6">6</div>
-        <div class="number" data-num="5">5</div>
-        <div class="number" data-num="4">4</div>
-        <div class="number" data-num="3">3</div>
-        <div class="number" data-num="2">2</div>
-        <div class="number" data-num="1">1</div>
-        <div class="number" data-num="0">0</div>
-        <div class="number" data-num=".">.</div>
+      <div id="display-panel">
+        <p id="display-text"></p>
       </div>
-      <div id="operands-container">
-        <div class="operator" data-operator="+">+</div>
-        <div class="operator" data-operator="+">-</div>
-        <div class="operator" data-operator="+">*</div>
-        <div class="operator" data-operator="+">/</div>
+      <div id="keys-panel">
+        <div id="numbers-container">
+          <div class="number button" data-num="9">9</div>
+          <div class="number button" data-num="8">8</div>
+          <div class="number button" data-num="7">7</div>
+          <div class="number button" data-num="6">6</div>
+          <div class="number button" data-num="5">5</div>
+          <div class="number button" data-num="4">4</div>
+          <div class="number button" data-num="3">3</div>
+          <div class="number button" data-num="2">2</div>
+          <div class="number button" data-num="1">1</div>
+          <div class="number button" data-num="0">0</div>
+          <div class="number button" data-num=".">.</div>
+        </div>
+        <div id="operators-container">
+          <div class="operator button" data-operator="+">+</div>
+          <div class="operator button" data-operator="-">-</div>
+          <div class="operator button" data-operator="*">*</div>
+          <div class="operator button" data-operator="/">/</div>
+        </div>
+        <div id="cancel" class="button">C</div>
+        <div id="delete" class="button">DEL</div>
+        <div id="equals" class="button">=</div>
       </div>
-      <div id="equals__btn">=</div>
-      <div id="cancel__btn">C</div>
     </div>
   </main>
   <script src="javascript/main.js"></script>

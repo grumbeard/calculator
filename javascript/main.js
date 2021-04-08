@@ -16,7 +16,7 @@ for (let operator of operators) {
   operator.addEventListener("click", handleInput);
 };
 
-const displayPanel = document.getElementById("display-panel");
+const displayText = document.getElementById("display-text");
 
 
 function handleInput(e) {
@@ -68,7 +68,7 @@ function handleEvaluation(e) {
   // Operator should be reset to blank if evaluation triggered by '=' button
   // Operator stored in memory is otherwise usually updated to the operator that triggered the evaluation
   if (e) {
-    if (e.target.id == "equals__btn") resetValues('operator')
+    if (e.target.id == "equals") resetValues('operator')
   }
 }
 
@@ -86,11 +86,11 @@ function operate(num1, num2, operator) {
 }
 
 function updateDisplay(results) {
-  // Round to 15 significant figures only when displaying value
+  // Round to 8 significant figures only when displaying value
   // Ensures stored value in memory remains accurate
-  if (results) results = +results.toFixed(15);
+  if (results) results = +results.toFixed(8);
 
-  displayPanel.innerText = results;
+  displayText.innerText = results;
 }
 
 function updateOperands(outcome) {
@@ -104,11 +104,11 @@ function resetValues() {
 }
 
 // Detect Equals
-const equalsButton = document.getElementById("equals__btn");
+const equalsButton = document.getElementById("equals");
 equalsButton.addEventListener("click", handleEvaluation);
 
 // Detect Cancel
-const cancelButton = document.getElementById("cancel__btn");
+const cancelButton = document.getElementById("cancel");
 cancelButton.addEventListener("click", () => {
   resetValues('num1', 'num2', 'operator');
   updateDisplay('');
