@@ -16,7 +16,7 @@ for (let operator of operators) {
   operator.addEventListener("click", handleInput);
 };
 
-const displayPanel = document.getElementById("display-panel");
+const displayText = document.getElementById("display-text");
 
 
 function handleInput(e) {
@@ -86,11 +86,11 @@ function operate(num1, num2, operator) {
 }
 
 function updateDisplay(results) {
-  // Round to 15 significant figures only when displaying value
+  // Round to 8 significant figures only when displaying value
   // Ensures stored value in memory remains accurate
-  if (results) results = +results.toFixed(15);
+  if (results) results = +results.toFixed(8);
 
-  displayPanel.innerText = results;
+  displayText.innerText = results;
 }
 
 function updateOperands(outcome) {
