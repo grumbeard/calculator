@@ -68,7 +68,7 @@ function handleEvaluation(e) {
   // Operator should be reset to blank if evaluation triggered by '=' button
   // Operator stored in memory is otherwise usually updated to the operator that triggered the evaluation
   if (e) {
-    if (e.target.id == "equals__btn") resetValues('operator')
+    if (e.target.id == "equals") resetValues('operator')
   }
 }
 
@@ -104,11 +104,11 @@ function resetValues() {
 }
 
 // Detect Equals
-const equalsButton = document.getElementById("equals__btn");
+const equalsButton = document.getElementById("equals");
 equalsButton.addEventListener("click", handleEvaluation);
 
 // Detect Cancel
-const cancelButton = document.getElementById("cancel__btn");
+const cancelButton = document.getElementById("cancel");
 cancelButton.addEventListener("click", () => {
   resetValues('num1', 'num2', 'operator');
   updateDisplay('');

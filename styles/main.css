@@ -1,0 +1,79 @@
+@import "reset.css";
+
+main {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#calculator-body {
+  height: 50vh;
+  width: 60vw;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: lightgray;
+}
+
+#display-panel {
+  height: 33%;
+  background-color: gray;
+}
+
+#keys-panel {
+  height: 66%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 1em;
+  grid-template-areas:
+  "num num num operator operator cancel"
+  "num num num operator operator delete"
+  "num num num equals equals equals";
+  background-color: white;
+}
+
+#numbers-container {
+  grid-area: num;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-gap: 1em;
+  padding: 1em 0 1em 1em;
+}
+
+#operators-container {
+  grid-area: operator;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 1em;
+  padding: 1em 0 0 0;
+}
+
+#cancel {
+  grid-area: cancel;
+  margin: 1em 1em 0 0;
+}
+
+#delete {
+  grid-area: delete;
+  margin: 0 1em 0 0;
+}
+
+#equals {
+  grid-area: equals;
+  margin: 0 1em 1em 0;
+}
+
+[data-num="0"] {
+  grid-column: 1/ span 2;
+  grid-row: 4/ span 1;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: orange;
+  border-radius: 15px;
+}
