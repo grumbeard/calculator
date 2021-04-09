@@ -34,36 +34,37 @@ function handleInput(e) {
 
 // If input is operator, store operator
   if (processedInput.operator) {
-    if (readyToOperate()) {
-      handleEvaluation();
-    } else {
-      memory.operator = processedInput.operator;
-    }
-    return;
+    // Apply operator to result if available (stored also in num1)
+    if (memory.result) resetValues('num2', 'operator', 'result');
+    if (readyToOperate()) handleEvaluation();
+    memory.operator = processedInput.operator;
   }
 
   // If input is number, store number
   if (processedInput.number) {
-    if (!memory.num1) {
+    // Prevent input of too many digits
+    if (!memory.operator && !memory.num2 && memory.num1.length >= 8 || memory.num2.length >= 8) return;
+
+    if (memory.result && !memory.operator) {
+      // If number is input right after evaluation
+      // clear memory before receiving input
+      resetValues('num1', 'num2', 'operator', 'result');
+      storeNumber("num1", processedInput.number)
+    } else if (!memory.num1) {
       // Cannot input to num2 if num1 not input yet
-      storeValue("num1", processedInput.number);
-    } else if (readyToOperate()) {
-      handleEvaluation();
+      storeNumber("num1", processedInput.number);
     } else if (memory.num2 || memory.operator) {
       // If num2 input exists, can only append number to num2
       // If num2 has no input but num1 and operator exist
-      storeValue("num2", processedInput.number);
-    } else if (!memory.operator && memory.result) {
-      // If number is input right after evaluation
-      // clear memory before receiving input
-      handleEvaluation();
+      storeNumber("num2", processedInput.number);
     } else {
-      storeValue("num1", processedInput.number);
+      storeNumber("num1", processedInput.number);
     }
   }
+  console.log("Processed: ", memory);
 }
 
-function storeValue(valueType, value) {
+function storeNumber(valueType, value) {
   // Ignore extrad period inputs
   if (value == "." && memory[valueType].includes(".")) value = '';
   memory[valueType] += value;
@@ -102,7 +103,7 @@ function processKey(key) {
     switch (key) {
       case '=':
         keyButton = document.getElementById("equals");
-        handleEvaluation();
+        handleEvaluation(equalsButton);
         break;
       case 'Enter':
         keyButton = document.getElementById("equals");
@@ -139,9 +140,12 @@ function handleEvaluation(e) {
   let num2 = parseFloat(memory.num2);
   let outcome = operate(num1, num2, memory.operator);
   updateDisplay(outcome);
-  updateOperands(outcome);
+  updateValue("num1", outcome);
+  updateValue("result", outcome);
+  // New operator should be kept if it triggered evaluation
+  // Hence only num2 should be reset
+  resetValues('num2');
   // Operator should be reset to blank if evaluation triggered by '=' button
-  // Operator stored in memory is otherwise usually updated to the operator that triggered the evaluation
   if (e) {
     if (e.target.id == "equals") resetValues('operator')
   }
@@ -167,7 +171,6 @@ function operate(num1, num2, operator) {
 }
 
 function updateDisplay(value) {
-  console.log(memory);
   // Round to 8 significant figures only when displaying value
   // Ensures stored value in memory remains accurate
   if (value && value != "invalid") {
@@ -177,21 +180,22 @@ function updateDisplay(value) {
   displayText.innerText = value;
 }
 
-function updateOperands(outcome) {
+function updateValue(valueType, value) {
   // Update stored operands
-  memory.num1 = outcome.toString();
-  resetValues('num2');
+  memory[valueType] = value.toString();
+  console.log("Updated: ", memory);
 }
 
 function resetValues() {
   [...arguments].forEach(argument => memory[argument] = '');
+  console.log("Reset: ", memory);
 }
 
 
 // Detect Equals
 const equalsButton = document.getElementById("equals");
-equalsButton.addEventListener("click", () => {
-  if (readyToOperate()) handleEvaluation();
+equalsButton.addEventListener("click", (e) => {
+  if (readyToOperate()) handleEvaluation(e);
 });
 
 
@@ -200,7 +204,7 @@ const cancelButton = document.getElementById("cancel");
 cancelButton.addEventListener("click", handleCancel);
 
 function handleCancel() {
-  resetValues('num1', 'num2', 'operator');
+  resetValues('num1', 'num2', 'operator', 'result');
   updateDisplay('');
 }
 
@@ -222,9 +226,7 @@ function handleDelete() {
 }
 
 function removeLastChar(string) {
-  let x = string.substring(0, (string.length - 1));
-  console.log(x);
-  return x
+  return string.substring(0, (string.length - 1));
 }
 
 // Remove keypress effect ('typed') after transition completes
