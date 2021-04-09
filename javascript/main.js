@@ -61,7 +61,6 @@ function handleInput(e) {
       storeNumber("num1", processedInput.number);
     }
   }
-  console.log("Processed: ", memory);
 }
 
 function storeNumber(valueType, value) {
@@ -183,12 +182,10 @@ function updateDisplay(value) {
 function updateValue(valueType, value) {
   // Update stored operands
   memory[valueType] = value.toString();
-  console.log("Updated: ", memory);
 }
 
 function resetValues() {
   [...arguments].forEach(argument => memory[argument] = '');
-  console.log("Reset: ", memory);
 }
 
 
