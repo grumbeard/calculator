@@ -2,7 +2,8 @@
 let memory = {
   num1: '',
   num2: '',
-  operator: ''
+  operator: '',
+  result: ''
 };
 
 // Detect calculator number / operator inputs
@@ -31,27 +32,42 @@ function handleInput(e) {
 
   // Update input field with results of evaluation
 
-  // If input is number, store number
-  if (processedInput.number) {
-    let num = processedInput.number;
-    if (memory.num2 || memory.operator) {
-      // Ignore extrad period inputs
-      if (num == "." && memory.num2.includes(".")) num = '';
-      memory.num2 += processedInput.number;
-      updateDisplay(parseFloat(memory.num2));
-    } else {
-      if (num == "." && memory.num1.includes(".")) num = '';
-      memory.num1 += processedInput.number;
-      updateDisplay(parseFloat(memory.num1));
-    }
-  // Otherwise, input is operator
-  } else {
-    // Check if necessary inputs are available
-    // If so, evaluate inputs and display results
+// If input is operator, store operator
+  if (processedInput.operator) {
+    // Apply operator to result if available (stored also in num1)
+    if (memory.result) resetValues('num2', 'operator', 'result');
     if (readyToOperate()) handleEvaluation();
-    // Etiher way, store the new operator
     memory.operator = processedInput.operator;
   }
+
+  // If input is number, store number
+  if (processedInput.number) {
+    // Prevent input of too many digits
+    if (!memory.operator && !memory.num2 && memory.num1.length >= 8 || memory.num2.length >= 8) return;
+
+    if (memory.result && !memory.operator) {
+      // If number is input right after evaluation
+      // clear memory before receiving input
+      resetValues('num1', 'num2', 'operator', 'result');
+      storeNumber("num1", processedInput.number)
+    } else if (!memory.num1) {
+      // Cannot input to num2 if num1 not input yet
+      storeNumber("num1", processedInput.number);
+    } else if (memory.num2 || memory.operator) {
+      // If num2 input exists, can only append number to num2
+      // If num2 has no input but num1 and operator exist
+      storeNumber("num2", processedInput.number);
+    } else {
+      storeNumber("num1", processedInput.number);
+    }
+  }
+}
+
+function storeNumber(valueType, value) {
+  // Ignore extrad period inputs
+  if (value == "." && memory[valueType].includes(".")) value = '';
+  memory[valueType] += value;
+  updateDisplay(parseFloat(memory[valueType]));
 }
 
 function processInput(event) {
@@ -86,7 +102,7 @@ function processKey(key) {
     switch (key) {
       case '=':
         keyButton = document.getElementById("equals");
-        handleEvaluation();
+        handleEvaluation(equalsButton);
         break;
       case 'Enter':
         keyButton = document.getElementById("equals");
@@ -123,9 +139,12 @@ function handleEvaluation(e) {
   let num2 = parseFloat(memory.num2);
   let outcome = operate(num1, num2, memory.operator);
   updateDisplay(outcome);
-  updateOperands(outcome);
+  updateValue("num1", outcome);
+  updateValue("result", outcome);
+  // New operator should be kept if it triggered evaluation
+  // Hence only num2 should be reset
+  resetValues('num2');
   // Operator should be reset to blank if evaluation triggered by '=' button
-  // Operator stored in memory is otherwise usually updated to the operator that triggered the evaluation
   if (e) {
     if (e.target.id == "equals") resetValues('operator')
   }
@@ -160,10 +179,9 @@ function updateDisplay(value) {
   displayText.innerText = value;
 }
 
-function updateOperands(outcome) {
+function updateValue(valueType, value) {
   // Update stored operands
-  memory.num1 = outcome;
-  resetValues('num2');
+  memory[valueType] = value.toString();
 }
 
 function resetValues() {
@@ -173,8 +191,8 @@ function resetValues() {
 
 // Detect Equals
 const equalsButton = document.getElementById("equals");
-equalsButton.addEventListener("click", () => {
-  if (readyToOperate()) handleEvaluation();
+equalsButton.addEventListener("click", (e) => {
+  if (readyToOperate()) handleEvaluation(e);
 });
 
 
@@ -183,7 +201,7 @@ const cancelButton = document.getElementById("cancel");
 cancelButton.addEventListener("click", handleCancel);
 
 function handleCancel() {
-  resetValues('num1', 'num2', 'operator');
+  resetValues('num1', 'num2', 'operator', 'result');
   updateDisplay('');
 }
 
@@ -195,12 +213,11 @@ deleteButton.addEventListener("click", handleDelete);
 function handleDelete() {
   if (memory.num2) {
     memory.num2 = removeLastChar(memory.num2.toString());
-    updateDisplay(parseFloat(memory.num2));
+    memory.num2 ? updateDisplay(parseFloat(memory.num2)) : updateDisplay('');
   } else if (memory.num1) {
     // If any operator exists, user can still delete character from num1
-    let newString = removeLastChar(memory.num1.toString());
-    memory.num1 = newString;
-    updateDisplay(parseFloat(memory.num1));
+    memory.num1 = removeLastChar(memory.num1.toString());
+    memory.num1 ? updateDisplay(parseFloat(memory.num1)) : updateDisplay('');
   }
   // Nothing happens if there is no numerical input to delete
 }
